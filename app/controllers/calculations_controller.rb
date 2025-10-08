@@ -36,6 +36,7 @@ class CalculationsController < ApplicationController
       mass_kg: 70, scale_by_mass: true,
       gut_tolerance: "medium", weather: "temperate", altitude: "low",
       gel_g: 30,
+      bottle_g: 0,
       bottle_ml: 500, drink_g_per_100ml: 6
     }
   end
