@@ -1,17 +1,17 @@
 <div class="container mx-auto px-4 py-8 max-w-4xl">
   <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Carb Calc</h1>
-  
+
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Formularz -->
     <div class="bg-white rounded-lg shadow-md p-6">
       <h2 class="text-xl font-semibold mb-6 text-gray-700">Parametry treningu</h2>
-      
-      <%= form_with url: calculations_path, local: true, class: "space-y-4" do |form| %>
+
+      <%= form_with scope: :calc, url: calculations_path, local: true, class: "space-y-4" do |form| %>
         <!-- Total Time -->
         <div>
           <%= form.label :total_min, "Całkowity czas (minuty)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= form.number_field :total_min, value: @input[:total_min], 
-                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+          <%= form.number_field :total_min, value: @input[:total_min],
+                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                 min: 1, step: 1 %>
         </div>
 
@@ -19,32 +19,32 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <%= form.label :z1, "Z1 (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.number_field :z1, value: @input[:z1], 
-                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            <%= form.number_field :z1, value: @input[:z1],
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                   min: 0, step: 1 %>
           </div>
           <div>
             <%= form.label :z2, "Z2 (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.number_field :z2, value: @input[:z2], 
-                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            <%= form.number_field :z2, value: @input[:z2],
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                   min: 0, step: 1 %>
           </div>
           <div>
             <%= form.label :z3, "Z3 (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.number_field :z3, value: @input[:z3], 
-                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            <%= form.number_field :z3, value: @input[:z3],
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                   min: 0, step: 1 %>
           </div>
           <div>
             <%= form.label :z4, "Z4 (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.number_field :z4, value: @input[:z4], 
-                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            <%= form.number_field :z4, value: @input[:z4],
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                   min: 0, step: 1 %>
           </div>
           <div>
             <%= form.label :z5, "Z5 (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.number_field :z5, value: @input[:z5], 
-                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            <%= form.number_field :z5, value: @input[:z5],
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                   min: 0, step: 1 %>
           </div>
         </div>
@@ -62,13 +62,13 @@
 
         <!-- Przycisk -->
         <div class="pt-4">
-          <%= form.submit "Oblicz", 
+          <%= form.submit "Oblicz",
                 class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium" %>
         </div>
       <% end %>
 
       <!-- Błędy walidacji -->
-      <% if defined?(@errors) && @errors.present? %>
+      <% if defined?(@errors) && @errors&.any? %>
         <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
           <h3 class="text-sm font-medium text-red-800 mb-2">Błędy walidacji:</h3>
           <ul class="text-sm text-red-700 list-disc list-inside">
@@ -85,30 +85,15 @@
     <!-- Wyniki -->
     <div class="bg-white rounded-lg shadow-md p-6">
       <h2 class="text-xl font-semibold mb-6 text-gray-700">Wyniki</h2>
-      
-      <% if defined?(@result) && @result.present? %>
-        <div class="space-y-4">
-          <div class="bg-blue-50 p-4 rounded-md">
-            <h3 class="font-medium text-blue-900 mb-2">Węglowodany na godzinę</h3>
-            <p class="text-2xl font-bold text-blue-600"><%= @result[:carbs_per_hour_rounded] %> g/h</p>
-            <p class="text-sm text-blue-700">(dokładnie: <%= @result[:carbs_per_hour] %> g/h)</p>
-          </div>
 
-          <div class="bg-green-50 p-4 rounded-md">
-            <h3 class="font-medium text-green-900 mb-2">Całkowite węglowodany</h3>
-            <p class="text-2xl font-bold text-green-600"><%= @result[:total_carbs] %> g</p>
+      <%= turbo_frame_tag "results" do %>
+        <% if defined?(@result) && @result&.any? %>
+          <%= render "results", result: @result %>
+        <% else %>
+          <div class="text-center text-gray-500 py-8">
+            <p>Wprowadź parametry treningu i kliknij "Oblicz" aby zobaczyć wyniki</p>
           </div>
-
-          <div class="bg-purple-50 p-4 rounded-md">
-            <h3 class="font-medium text-purple-900 mb-2">Co 20 minut</h3>
-            <p class="text-2xl font-bold text-purple-600"><%= @result[:carbs_per_20min_rounded] %> g</p>
-            <p class="text-sm text-purple-700">(dokładnie: <%= @result[:carbs_per_20min] %> g)</p>
-          </div>
-        </div>
-      <% else %>
-        <div class="text-center text-gray-500 py-8">
-          <p>Wprowadź parametry treningu i kliknij "Oblicz" aby zobaczyć wyniki</p>
-        </div>
+        <% end %>
       <% end %>
     </div>
   </div>

@@ -9,6 +9,11 @@ class CalculationsController < ApplicationController
     if result.success?
       @input = result.value![:input]
       @result = result.value![:value]
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { render :new }
+      end
     else
       @input = calc_params.to_h
       @errors = result.failure

@@ -1,0 +1,18 @@
+<div class="space-y-4">
+  <div class="bg-blue-50 p-4 rounded-md">
+    <h3 class="font-medium text-blue-900 mb-2">Węglowodany na godzinę</h3>
+    <p class="text-2xl font-bold text-blue-600"><%= result[:carbs_per_hour_rounded] %> g/h</p>
+    <p class="text-sm text-blue-700">(dokładnie: <%= result[:carbs_per_hour] %> g/h)</p>
+  </div>
+
+  <div class="bg-green-50 p-4 rounded-md">
+    <h3 class="font-medium text-green-900 mb-2">Całkowite węglowodany</h3>
+    <p class="text-2xl font-bold text-green-600"><%= result[:total_carbs] %> g</p>
+  </div>
+
+  <div class="bg-purple-50 p-4 rounded-md">
+    <h3 class="font-medium text-purple-900 mb-2">Co 20 minut</h3>
+    <p class="text-2xl font-bold text-purple-600"><%= result[:carbs_per_20min_rounded] %> g</p>
+    <p class="text-sm text-purple-700">(dokładnie: <%= result[:carbs_per_20min] %> g)</p>
+  </div>
+</div>
