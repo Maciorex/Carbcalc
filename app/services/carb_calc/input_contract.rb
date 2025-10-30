@@ -3,13 +3,14 @@
 module CarbCalc
   class InputContract < Dry::Validation::Contract
     params do
+      optional(:calculation_mode).maybe(:string)
       required(:total_min).filled(:integer, gt?: 0)
 
-      required(:z1).filled(:integer, gteq?: 0)
-      required(:z2).filled(:integer, gteq?: 0)
-      required(:z3).filled(:integer, gteq?: 0)
-      required(:z4).filled(:integer, gteq?: 0)
-      required(:z5).filled(:integer, gteq?: 0)
+      optional(:z1).filled(:integer, gteq?: 0)
+      optional(:z2).filled(:integer, gteq?: 0)
+      optional(:z3).filled(:integer, gteq?: 0)
+      optional(:z4).filled(:integer, gteq?: 0)
+      optional(:z5).filled(:integer, gteq?: 0)
 
       required(:mass_kg).filled(:float, gt?: 0)
       required(:scale_by_mass).filled(:bool)
