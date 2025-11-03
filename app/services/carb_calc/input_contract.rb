@@ -12,6 +12,8 @@ module CarbCalc
       optional(:z4).filled(:integer, gteq?: 0)
       optional(:z5).filled(:integer, gteq?: 0)
 
+      optional(:intensity_level).maybe(:string)
+
       required(:mass_kg).filled(:float, gt?: 0)
       required(:scale_by_mass).filled(:bool)
 
@@ -36,6 +38,12 @@ module CarbCalc
 
     rule(:altitude) do
       key.failure("must be one of: low, high") unless %w[low high].include?(value)
+    end
+
+    rule(:intensity_level) do
+      if value.present?
+        key.failure("must be one of: easy, moderate, intense, race") unless %w[easy moderate intense race].include?(value)
+      end
     end
   end
 end
