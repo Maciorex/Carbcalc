@@ -3,7 +3,7 @@
 module CarbCalc
   class InputContract < Dry::Validation::Contract
     params do
-      optional(:calculation_mode).maybe(:string)
+      required(:calculation_mode).maybe(:string)
       required(:total_min).filled(:integer, gt?: 0)
 
       optional(:z1).filled(:integer, gteq?: 0)
@@ -43,6 +43,12 @@ module CarbCalc
     rule(:intensity_level) do
       if value.present?
         key.failure("must be one of: easy, moderate, intense, race") unless %w[easy moderate intense race].include?(value)
+      end
+    end
+
+    rule(:intensity_level, :calculation_mode) do
+      if values[:calculation_mode] == "auto"
+        key.failure("is required when calculation mode is auto") if value.blank?
       end
     end
   end

@@ -61,6 +61,7 @@
           <% end %>
 
           <!-- Ukryte pola wymagane przez walidację -->
+          <%= form.hidden_field :calculation_mode, value: @input[:calculation_mode] || "auto" %>
           <%= form.hidden_field :mass_kg, value: @input[:mass_kg] %>
           <%= form.hidden_field :scale_by_mass, value: @input[:scale_by_mass] %>
           <%= form.hidden_field :gut_tolerance, value: @input[:gut_tolerance] %>

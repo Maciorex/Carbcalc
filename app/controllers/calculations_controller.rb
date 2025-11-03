@@ -15,10 +15,6 @@ class CalculationsController < ApplicationController
   def create
     params_hash = calc_params.to_h
 
-    if params_hash[:calculation_mode] == "auto"
-      params_hash = apply_automatic_distribution(params_hash)
-    end
-
     result = CarbCalc::Calculator.new(params_hash).call
 
     if result.success?
@@ -63,18 +59,6 @@ class CalculationsController < ApplicationController
       bottle_g: 0,
       bottle_ml: 500, drink_g_per_100ml: 6
     }
-  end
-
-  def apply_automatic_distribution(params)
-    total_min = params[:total_min].to_i
-
-    params.merge(
-      z1: (total_min * 0.10).round,
-      z2: (total_min * 0.33).round,
-      z3: (total_min * 0.33).round,
-      z4: (total_min * 0.20).round,
-      z5: (total_min * 0.04).round
-    )
   end
 
   def sum_zones(input)
