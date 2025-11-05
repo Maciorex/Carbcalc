@@ -1,5 +1,7 @@
-<%= turbo_stream.replace "results" do %>
-  <%= turbo_frame_tag "results" do %>
-    <%= render "results", result: @result %>
+<% if defined?(@result) && @result %>
+  <%= turbo_stream.replace "results" do %>
+    <%= turbo_frame_tag "results" do %>
+      <%= render "results", result: @result %>
+    <% end %>
   <% end %>
 <% end %>

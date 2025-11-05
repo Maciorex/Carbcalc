@@ -54,13 +54,9 @@ module CarbCalc
     end
 
     def manual_calculation(params)
-      # 1. Oblicz średnią ważoną g/h
       gh = calculate_weighted_average_carbs_per_hour(params)
-
-      # 2. Oblicz całkowite węglowodany
       total_g = calculate_total_carbs(gh, params)
 
-      # 3. Dodaj guardy i pochodne
       {
         carbs_per_hour: gh.round(2),
         carbs_per_hour_rounded: gh.round,
@@ -71,31 +67,35 @@ module CarbCalc
     end
 
     def calculate_weighted_average_carbs_per_hour(params)
-      # Pobierz minuty w strefach
       z1, z2, z3, z4, z5 = params.values_at(:z1, :z2, :z3, :z4, :z5)
-      # Użyj total_min zamiast sumowania stref
-      total_minutes = params[:total_min]
-      
-      # Jeśli brak czasu, zwróć 0
+      total_minutes = total_minutes_from_params(params)
+
       return 0.0 if total_minutes == 0
-      
-      # Średnia ważona: (20*z1 + 35*z2 + 55*z3 + 75*z4 + 95*z5) / total_min
-      weighted_sum = (ZONE_CARBS_PER_HOUR[:z1] * z1) +
-                     (ZONE_CARBS_PER_HOUR[:z2] * z2) +
-                     (ZONE_CARBS_PER_HOUR[:z3] * z3) +
-                     (ZONE_CARBS_PER_HOUR[:z4] * z4) +
-                     (ZONE_CARBS_PER_HOUR[:z5] * z5)
-      
+
+      # (20*z1 + 35*z2 + 55*z3 + 75*z4 + 95*z5) / total_min
+      weighted_sum = (ZONE_CARBS_PER_HOUR[:z1] * z1.to_i) +
+                     (ZONE_CARBS_PER_HOUR[:z2] * z2.to_i) +
+                     (ZONE_CARBS_PER_HOUR[:z3] * z3.to_i) +
+                     (ZONE_CARBS_PER_HOUR[:z4] * z4.to_i) +
+                     (ZONE_CARBS_PER_HOUR[:z5] * z5.to_i)
+
       gh = weighted_sum.to_f / total_minutes
-      
-      # Guard: przytnij do [0, 120] g/h
+
+      # Guard: cut to [0, 120] g/h
       gh.clamp(0, 120)
     end
 
     def calculate_total_carbs(gh, params)
-      # total_g = gh * (total_min / 60)
-      total_minutes = params[:total_min]
+      total_minutes = total_minutes_from_params(params)
       gh * (total_minutes / 60.0)
     end
+
+    def total_minutes_from_params(params)
+      return params[:total_min] if params[:total_min].present?
+
+      z1, z2, z3, z4, z5 = params.values_at(:z1, :z2, :z3, :z4, :z5)
+      z1.to_i + z2.to_i + z3.to_i + z4.to_i + z5.to_i
+    end
+
   end
 end

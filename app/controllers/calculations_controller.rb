@@ -16,7 +16,6 @@ class CalculationsController < ApplicationController
     params_hash = calc_params.to_h
 
     result = CarbCalc::Calculator.new(params_hash).call
-
     if result.success?
       @input = result.value![:input]
       @result = result.value![:value]
@@ -28,7 +27,11 @@ class CalculationsController < ApplicationController
     else
       @input = calc_params.to_h
       @errors = result.failure
-      render :new, alert: "Calculation failed"
+
+      respond_to do |format|
+        format.turbo_stream { render "create", status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
