@@ -6,10 +6,6 @@ class CalculationsController < ApplicationController
       permitted = params.require(:calc).permit(:calculation_mode, :total_min, :z1, :z2, :z3, :z4, :z5, :intensity_level)
       @input.merge!(permitted.to_h.symbolize_keys)
     end
-
-    if @input[:calculation_mode] == "manual"
-      @input[:total_min] = sum_zones(@input)
-    end
   end
 
   def create
@@ -19,6 +15,7 @@ class CalculationsController < ApplicationController
     if result.success?
       @input = result.value![:input]
       @result = result.value![:value]
+      @input[:total_min] = @result[:total_minutes] if @result[:total_minutes].present?
 
       respond_to do |format|
         format.turbo_stream
@@ -26,7 +23,8 @@ class CalculationsController < ApplicationController
       end
     else
       @input = calc_params.to_h
-      @errors = result.failure
+      # Normalize errors to ensure values are arrays
+      @errors = normalize_validation_errors(result.failure)
 
       respond_to do |format|
         format.turbo_stream { render "create", status: :unprocessable_entity }
@@ -64,7 +62,9 @@ class CalculationsController < ApplicationController
     }
   end
 
-  def sum_zones(input)
-    [:z1, :z2, :z3, :z4, :z5].sum { |zone_key| input[zone_key].to_i }
+  def normalize_validation_errors(errors)
+    errors.transform_values do |messages|
+      messages.is_a?(Array) ? messages : [messages]
+    end
   end
 end

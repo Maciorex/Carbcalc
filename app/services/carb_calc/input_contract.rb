@@ -41,7 +41,10 @@ module CarbCalc
     end
 
     rule(:intensity_level) do
-      if value.present?
+      if values[:calculation_mode] == "auto"
+        key.failure("is required when calculation_mode is auto") if value.blank?
+        key.failure("must be one of: easy, moderate, intense, race") if value.present? && !%w[easy moderate intense race].include?(value)
+      elsif value.present?
         key.failure("must be one of: easy, moderate, intense, race") unless %w[easy moderate intense race].include?(value)
       end
     end

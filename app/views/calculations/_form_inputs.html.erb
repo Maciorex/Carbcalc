@@ -1,0 +1,71 @@
+<div class="border-b border-gray-200 pb-4">
+  <label class="text-sm font-medium text-gray-700 mb-2 block">Tryb wprowadzania</label>
+  <div class="inline-flex rounded-md shadow-sm ring-1 ring-gray-200 overflow-hidden">
+    <%= link_to "Automatyczny",
+                new_calculation_path(calc: input.merge(calculation_mode: "auto")),
+                data: { turbo_frame: "calc_inputs" },
+                class: "px-3 py-1 text-sm #{ input[:calculation_mode] == 'auto' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50' }" %>
+
+    <%= link_to "Ręczny",
+                new_calculation_path(calc: input.merge(calculation_mode: "manual")),
+                data: { turbo_frame: "calc_inputs" },
+                class: "px-3 py-1 text-sm #{ input[:calculation_mode] == 'manual' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50' }" %>
+  </div>
+</div>
+
+<%= form_with scope: :calc, url: calculations_path, local: true, class: "space-y-4" do |form| %>
+  <!-- Total Time -->
+  <div>
+    <%= form.label :total_min, "Całkowity czas (minuty)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.number_field :total_min, value: input[:total_min],
+          disabled: input[:calculation_mode] == "manual",
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+          min: 1, step: 1 %>
+  </div>
+
+  <!-- Zones -->
+  <% manual = input[:calculation_mode] == 'manual' %>
+  <% if manual %>
+    <div class="grid grid-cols-2 gap-4">
+      <% [:z1, :z2, :z3, :z4, :z5].each do |zone| %>
+        <div>
+          <%= form.label zone, "#{zone.to_s.upcase} (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.number_field zone, value: input[zone],
+                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100",
+                min: 0, step: 1 %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div>
+      <%= form.label :intensity_level, "Wybór intensywności", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.select :intensity_level,
+            options_for_select([
+              ["Spokojna", "easy"],
+              ["Średnia", "moderate"],
+              ["Intensywna", "intense"],
+              ["Zawody", "race"]
+            ], input[:intensity_level]),
+            { prompt: "Wybierz intensywność" },
+            { class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+  <% end %>
+
+  <!-- Hidden fields required by validation -->
+  <%= form.hidden_field :calculation_mode, value: input[:calculation_mode] || "auto" %>
+  <%= form.hidden_field :mass_kg, value: input[:mass_kg] %>
+  <%= form.hidden_field :scale_by_mass, value: input[:scale_by_mass] %>
+  <%= form.hidden_field :gut_tolerance, value: input[:gut_tolerance] %>
+  <%= form.hidden_field :weather, value: input[:weather] %>
+  <%= form.hidden_field :altitude, value: input[:altitude] %>
+  <%= form.hidden_field :gel_g, value: input[:gel_g] %>
+  <%= form.hidden_field :bottle_g, value: input[:bottle_g] %>
+  <%= form.hidden_field :bottle_ml, value: input[:bottle_ml] %>
+  <%= form.hidden_field :drink_g_per_100ml, value: input[:drink_g_per_100ml] %>
+
+  <div class="pt-4">
+    <%= form.submit "Oblicz",
+          class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium" %>
+  </div>
+<% end %>
+

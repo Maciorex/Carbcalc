@@ -1,19 +1,25 @@
 module CarbCalc
+  # Helper method to sum zone minutes
+  def self.sum_zones(params)
+    [:z1, :z2, :z3, :z4, :z5].sum { |zone_key| params[zone_key].to_i }
+  end
+
   class Calculator
     include Dry::Monads[:result]
 
-    # Stałe docelowe g/h dla stref
+    # Target carbs g/h for zones
     ZONE_CARBS_PER_HOUR = { z1: 20, z2: 35, z3: 55, z4: 75, z5: 95 }.freeze
 
     PRESETS = {
       "easy"     => { z1: 40, z2: 35, z3: 20, z4: 5,  z5: 0  },
       "moderate" => { z1: 20, z2: 40, z3: 30, z4: 8,  z5: 2  },
       "intense"  => { z1: 10, z2: 25, z3: 35, z4: 20, z5: 10 },
-      "race"     => { z1: 5,  z2: 20, z3: 35, z4: 25, z5: 15 },
+      "race"     => { z1: 5,  z2: 20, z3: 35, z4: 25, z5: 15 }
     }.freeze
 
     def initialize(params)
       @params = params
+      @total_minutes = total_minutes_from_params(params)
     end
 
     def call
@@ -33,7 +39,7 @@ module CarbCalc
 
     private
 
-    attr_reader :params
+    attr_reader :params, :total_minutes
 
     def auto_calculation(params)
       intensity_level = params[:intensity_level]
@@ -41,7 +47,6 @@ module CarbCalc
 
       return manual_calculation(params) unless preset
 
-      total_minutes = params[:total_min]
       params_with_zones = params.merge(
         z1: (total_minutes * preset[:z1] / 100.0).round,
         z2: (total_minutes * preset[:z2] / 100.0).round,
@@ -62,13 +67,13 @@ module CarbCalc
         carbs_per_hour_rounded: gh.round,
         total_carbs: total_g.round,
         carbs_per_20min: (gh / 3).round(2),
-        carbs_per_20min_rounded: (gh / 3).round
+        carbs_per_20min_rounded: (gh / 3).round,
+        total_minutes: total_minutes
       }
     end
 
     def calculate_weighted_average_carbs_per_hour(params)
       z1, z2, z3, z4, z5 = params.values_at(:z1, :z2, :z3, :z4, :z5)
-      total_minutes = total_minutes_from_params(params)
 
       return 0.0 if total_minutes == 0
 
@@ -86,16 +91,13 @@ module CarbCalc
     end
 
     def calculate_total_carbs(gh, params)
-      total_minutes = total_minutes_from_params(params)
       gh * (total_minutes / 60.0)
     end
 
     def total_minutes_from_params(params)
-      return params[:total_min] if params[:total_min].present?
+      return params[:total_min].to_i if params[:total_min].present?
 
-      z1, z2, z3, z4, z5 = params.values_at(:z1, :z2, :z3, :z4, :z5)
-      z1.to_i + z2.to_i + z3.to_i + z4.to_i + z5.to_i
+      CarbCalc.sum_zones(params)
     end
-
   end
 end
