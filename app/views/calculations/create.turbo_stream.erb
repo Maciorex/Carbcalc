@@ -1,0 +1,13 @@
+<% if defined?(@result) && @result %>
+  <%= turbo_stream.replace "results" do %>
+    <%= turbo_frame_tag "results" do %>
+      <%= render "results", result: @result %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_stream.replace "calc_inputs" do %>
+    <%= turbo_frame_tag "calc_inputs" do %>
+      <%= render "form_inputs", input: @input %>
+    <% end %>
+  <% end %>
+<% end %>

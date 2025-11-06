@@ -8,3 +8,10 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Custom radio button styling */
+input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}

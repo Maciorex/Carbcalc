@@ -1,0 +1,43 @@
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Carb Calc</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-6 text-gray-700">Parametry treningu</h2>
+
+      <%= turbo_frame_tag "calc_inputs" do %>
+        <%= render "form_inputs", input: @input %>
+      <% end %>
+
+      <!-- Validation errors -->
+      <% if defined?(@errors) && @errors&.any? %>
+        <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <h3 class="text-sm font-medium text-red-800 mb-2">Błędy walidacji:</h3>
+          <ul class="text-sm text-red-700 list-disc list-inside">
+            <% @errors.each do |field, messages| %>
+              <% messages.each do |message| %>
+                <li><%= field %>: <%= message %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Results -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-6 text-gray-700">Wyniki</h2>
+
+      <%= turbo_frame_tag "results" do %>
+        <% if defined?(@result) && @result&.any? %>
+          <%= render "results", result: @result %>
+        <% else %>
+          <div class="text-center text-gray-500 py-8">
+            <p>Wprowadź parametry treningu i kliknij "Oblicz" aby zobaczyć wyniki</p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
