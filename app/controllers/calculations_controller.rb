@@ -33,6 +33,23 @@ class CalculationsController < ApplicationController
     end
   end
 
+  def recipe
+    total_carbs = params[:total_carbs].to_f
+    ratio = params[:ratio]
+
+    if total_carbs.positive? && CarbCalc::RecipeCalculator::RATIOS.key?(ratio)
+      @recipe = CarbCalc::RecipeCalculator.new(total_carbs: total_carbs, ratio: ratio).call
+    else
+      @recipe = nil
+      @errors = ["Nieprawidłowe parametry przepisu"]
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to new_calculation_path }
+    end
+  end
+
   private
 
   def calc_params

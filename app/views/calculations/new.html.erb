@@ -40,4 +40,21 @@
       <% end %>
     </div>
   </div>
+
+  <!-- Recipe Panel -->
+  <div class="mt-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-6 text-gray-700">Przepis na żel węglowodanowy</h2>
+
+      <%= turbo_frame_tag "recipe" do %>
+        <% if defined?(@result) && @result&.any? %>
+          <%= render "recipe_form", total_carbs: @result[:total_carbs] %>
+        <% else %>
+          <div class="text-center text-gray-500 py-8">
+            <p>Najpierw wykonaj kalkulację, aby wygenerować przepis</p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>

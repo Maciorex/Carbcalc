@@ -6,5 +6,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "calculations#new"
-  resources :calculations, only: [:new, :create]
+  resources :calculations, only: [:new, :create] do
+    collection do
+      post :recipe
+    end
+  end
 end

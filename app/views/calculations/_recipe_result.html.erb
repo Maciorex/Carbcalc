@@ -1,0 +1,31 @@
+<div class="space-y-4">
+  <div class="bg-amber-50 p-4 rounded-md">
+    <h3 class="font-medium text-amber-900 mb-3">Składniki na żel węglowodanowy</h3>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between">
+        <span class="text-amber-800">Maltodekstryna:</span>
+        <span class="font-semibold text-amber-900"><%= recipe[:maltodextrin_g] %> g</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-amber-800">Fruktoza:</span>
+        <span class="font-semibold text-amber-900"><%= recipe[:fructose_g] %> g</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-amber-800">Woda:</span>
+        <span class="font-semibold text-amber-900"><%= recipe[:water_g] %> g</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-amber-800">Pektyna:</span>
+        <span class="font-semibold text-amber-900"><%= recipe[:pectin_tsp] %> łyżeczki</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 p-4 rounded-md">
+    <p class="text-xs text-gray-600">
+      <strong>Stosunek:</strong> <%= recipe[:ratio] %> (fruktoza:maltodekstryna)<br>
+      <strong>Całkowite węglowodany:</strong> <%= recipe[:total_carbs] %> g
+    </p>
+  </div>
+</div>
+

@@ -10,4 +10,10 @@
       <%= render "form_inputs", input: @input %>
     <% end %>
   <% end %>
+
+  <%= turbo_stream.replace "recipe" do %>
+    <%= turbo_frame_tag "recipe" do %>
+      <%= render "recipe_form", total_carbs: @result[:total_carbs] %>
+    <% end %>
+  <% end %>
 <% end %>
