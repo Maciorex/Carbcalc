@@ -1,0 +1,22 @@
+<div class="w-full max-w-6xl mx-auto">
+  <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">Carb Calc</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Kafel 1: Zapotrzebowanie + żel -->
+    <%= link_to new_calculation_path, class: "block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow border-2 border-transparent hover:border-blue-500" do %>
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Zapotrzebowanie + żel</h2>
+      <p class="text-gray-600">
+        Oblicz ile węglowodanów potrzebujesz na trening i wygeneruj przepis na żel.
+      </p>
+    <% end %>
+
+    <!-- Kafel 2: Kalkulator żelu -->
+    <%= link_to new_gel_calculation_path, class: "block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow border-2 border-transparent hover:border-blue-500" do %>
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kalkulator żelu</h2>
+      <p class="text-gray-600">
+        Podaj ile węglowodanów chcesz w żelu lub w jakiej pojemności chcesz się zmieścić.
+      </p>
+    <% end %>
+  </div>
+</div>
+
