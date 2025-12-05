@@ -1,0 +1,54 @@
+<%= form_with scope: :gel_calc, url: gel_calculations_path, local: true,
+    class: "space-y-6",
+    data: {
+      controller: "gel-mode",
+      gel_mode_mode_value: gel_calc[:mode] || "carbs_target"
+    } do |form| %>
+  <!-- Mode selection -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-3">Tryb obliczania</label>
+    <div class="space-y-3">
+      <div class="flex items-center">
+        <%= form.radio_button :mode, "carbs_target", checked: gel_calc[:mode] == "carbs_target",
+            id: "gel_calc_mode_carbs_target",
+            class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300",
+            data: { action: "change->gel-mode#changeMode" } %>
+        <%= form.label :mode, "Na podstawie docelowej ilości węglowodanów [g]", value: "carbs_target", class: "ml-2 text-sm text-gray-700" %>
+      </div>
+      <div class="flex items-center">
+        <%= form.radio_button :mode, "volume_target", checked: gel_calc[:mode] == "volume_target",
+            id: "gel_calc_mode_volume_target",
+            class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300",
+            data: { action: "change->gel-mode#changeMode" } %>
+        <%= form.label :mode, "Na podstawie docelowej objętości żelu [ml]", value: "volume_target", class: "ml-2 text-sm text-gray-700" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total carbs field -->
+  <div>
+    <%= form.label :total_carbs_g, "Docelowa ilość węglowodanów [g]", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.number_field :total_carbs_g, value: gel_calc[:total_carbs_g],
+          id: "gel_calc_total_carbs_g",
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+          min: 0.1, step: 0.1, placeholder: "np. 60",
+          data: { gel_mode_target: "totalCarbs" } %>
+    <p class="mt-1 text-xs text-gray-500">Wypełnij, gdy wybrano tryb "na podstawie węglowodanów"</p>
+  </div>
+
+  <!-- Volume field -->
+  <div>
+    <%= form.label :volume_ml, "Docelowa objętość żelu [ml]", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.number_field :volume_ml, value: gel_calc[:volume_ml],
+          id: "gel_calc_volume_ml",
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+          min: 0.1, step: 0.1, placeholder: "np. 100",
+          data: { gel_mode_target: "volume" } %>
+    <p class="mt-1 text-xs text-gray-500">Wypełnij, gdy wybrano tryb "na podstawie objętości"</p>
+  </div>
+
+  <div class="pt-4">
+    <%= form.submit "Oblicz",
+          class: "w-full bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium shadow-sm transition-colors" %>
+  </div>
+<% end %>

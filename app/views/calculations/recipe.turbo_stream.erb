@@ -1,0 +1,23 @@
+<%= turbo_stream.replace "recipe" do %>
+  <%= turbo_frame_tag "recipe" do %>
+    <% if defined?(@recipe) && @recipe %>
+      <%= render "recipe_form", total_carbs: params[:total_carbs] || @recipe[:total_carbs] %>
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <%= render "recipe_result", recipe: @recipe %>
+      </div>
+    <% else %>
+      <%= render "recipe_form", total_carbs: params[:total_carbs] if params[:total_carbs].present? %>
+      <div class="text-center text-red-500 py-4 mt-4">
+        <% if defined?(@errors) && @errors&.any? %>
+          <ul class="text-sm list-disc list-inside">
+            <% @errors.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>Nie udało się wygenerować przepisu</p>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

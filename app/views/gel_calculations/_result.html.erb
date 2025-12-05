@@ -1,0 +1,49 @@
+<div class="bg-white rounded-lg shadow-md p-6">
+  <h2 class="text-xl font-semibold mb-6 text-gray-700">Wynik kalkulacji żelu</h2>
+
+  <div class="space-y-4">
+    <div class="pb-4 border-b border-gray-200">
+      <p class="text-sm text-gray-600">
+        <% if result[:mode] == "carbs_target" %>
+          Tryb: na podstawie <strong><%= result[:total_carbs_g] %> g węglowodanów</strong>
+        <% else %>
+          Tryb: na podstawie <strong><%= result[:volume_ml] %> ml żelu</strong>
+        <% end %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-sm text-gray-600">Maltodekstryna</p>
+        <p class="text-2xl font-bold text-gray-800"><%= result[:maltodextrin_g] %> g</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Fruktoza</p>
+        <p class="text-2xl font-bold text-gray-800"><%= result[:fructose_g] %> g</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Woda</p>
+        <p class="text-2xl font-bold text-gray-800"><%= result[:water_g] %> g</p>
+      </div>
+      <% if result[:estimated_volume_ml] %>
+        <div>
+          <p class="text-sm text-gray-600">Szacowana objętość</p>
+          <p class="text-2xl font-bold text-gray-800"><%= result[:estimated_volume_ml] %> ml</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="pt-6 border-t border-gray-200">
+      <h3 class="text-lg font-semibold mb-3 text-gray-700">Przepis</h3>
+      <p class="text-gray-700 leading-relaxed">
+        Wymieszaj <strong><%= result[:maltodextrin_g] %> g maltodekstryny</strong> i <strong><%= result[:fructose_g] %> g fruktozy</strong> z <strong><%= result[:water_g] %> g wody</strong>.
+        <% if result[:estimated_volume_ml] %>
+          Otrzymasz około <strong><%= result[:estimated_volume_ml] %> ml</strong> żelu o zawartości <strong><%= result[:total_carbs_g] %> g węglowodanów</strong>.
+        <% else %>
+          Otrzymasz żel o zawartości <strong><%= result[:total_carbs_g] %> g węglowodanów</strong> w objętości około <strong><%= result[:volume_ml] %> ml</strong>.
+        <% end %>
+        Opcjonalnie dodaj ~1–2 g pektyny.
+      </p>
+    </div>
+  </div>
+</div>
