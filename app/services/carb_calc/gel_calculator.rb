@@ -68,4 +68,3 @@ module CarbCalc
     end
   end
 end
-

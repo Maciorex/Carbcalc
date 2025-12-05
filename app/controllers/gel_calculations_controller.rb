@@ -34,4 +34,3 @@ class GelCalculationsController < ApplicationController
     end
   end
 end
-
